@@ -1,7 +1,6 @@
 package zm.mc.plugin.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,12 +9,11 @@ import zm.mc.plugin.annotation.CainCommand;
 
 
 @CainCommand(name = "cain.demo")
-public class DemoCommand  implements CommandExecutor{
+public class DemoCommand extends AbsCainCommand{
 
-    private final CainBuilderPlugin plugin;
-
+ 
 	public DemoCommand(CainBuilderPlugin plugin) {
-		this.plugin = plugin;
+		super(plugin);
 	}
   
     @Override
@@ -28,7 +26,6 @@ public class DemoCommand  implements CommandExecutor{
             Player player = (Player) sender;
 
             if( player.hasPermission("cain.demo")){
-                plugin.getLogger().info(player.getName() + " executed /cain.demo command.");
                 player.sendMessage(player.getName() + " executed /cain.demo command.");
             } else {
                 player.sendMessage("You do not have permission to execute this command.");
