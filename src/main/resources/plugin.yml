@@ -1,3 +1,21 @@
-name: AlfaPlugin
+name: CainBuilderPlugin
 version: 1.0
-main: zm.mc.plugin.AlfaPlugin
+main: zm.mc.plugin.CainBuilderPlugin
+
+commands:
+  cain.demo:
+    description: Main command for AlfaPlugin
+    usage: /<command>
+    aliases: [a]
+
+
+permissions:
+    cain.*:
+        description: Gives access to all doorman commands
+        children:
+            doorman.demo: true
+    cain.demo:
+        description: Demo command permission(s)
+        default: op
+
+command-package: zm.mc.plugin.command
