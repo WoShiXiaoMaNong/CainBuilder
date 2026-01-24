@@ -9,13 +9,10 @@ commands:
     aliases: [a]
 
 
-permissions:
-    cain.*:
-        description: Gives access to all doorman commands
-        children:
-            doorman.demo: true
-    cain.demo:
-        description: Demo command permission(s)
-        default: op
+# It is recommended to define permissions in the command annotations (CainCommand.java) and register them programmatically.
+# permissions:
+#     cain.demo:
+#         description: Demo command permission(s)
+#         default: op
 
 command-package: zm.mc.plugin.command
