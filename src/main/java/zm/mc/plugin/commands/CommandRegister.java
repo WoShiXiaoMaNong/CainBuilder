@@ -2,6 +2,9 @@ package zm.mc.plugin.commands;
 
 import java.util.List;
 
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
 import zm.mc.common.ClassScanner;
 import zm.mc.common.LoggerUtil;
 import zm.mc.plugin.CainBuilderPlugin;
@@ -29,14 +32,12 @@ public class CommandRegister {
 
             if(cls.isAnnotationPresent(CainCommand.class)) {
                 CainCommand commandAnnotation = cls.getAnnotation(CainCommand.class);
-                String commandName = commandAnnotation.name();
+               
                 try {
                     Object commandInstance = cls.getConstructor(CainBuilderPlugin.class).newInstance(plugin);
-                    
-                    plugin.getCommand(commandName).setExecutor((AbsCainCommand) commandInstance);
-                    logger.info("Registered command: " + commandName + "\twith executor " + cls.getName());
+                    doRegisterCommand(plugin,  (AbsCainCommand) commandInstance,commandAnnotation);
                 } catch (Exception e) {
-                    logger.severe("Failed to register command: " + commandName + " with executor " + e.getMessage());
+                    logger.severe("Failed to register command: " + commandAnnotation.name() + " with executor " + e.getMessage());
                     break;
                 }
             }
@@ -45,6 +46,20 @@ public class CommandRegister {
     }
 
 
-    //Scan for more commands and register them here in the future
+    private static void doRegisterCommand(CainBuilderPlugin plugin, AbsCainCommand commandExecutor,CainCommand commandAnnotation) {
+        String commandName = commandAnnotation.name();
+
+        // Register permission
+        String perDesc = commandAnnotation.permisstionDescription();
+        PermissionDefault permDefault = commandAnnotation.permissionDefault();
+        Permission perm = new Permission(commandName, perDesc,permDefault);
+        plugin.getServer().getPluginManager().addPermission(perm);
+
+        // Register command executor
+        
+
+        plugin.getCommand(commandName).setExecutor(commandExecutor);
+        logger.info("Registered command: " + commandName + "\twith executor " + commandExecutor.getClass().getName());
+    }
 
 }

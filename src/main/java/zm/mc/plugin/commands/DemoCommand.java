@@ -3,12 +3,13 @@ package zm.mc.plugin.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
 import zm.mc.plugin.CainBuilderPlugin;
 import zm.mc.plugin.annotation.CainCommand;
 
 
-@CainCommand(name = "cain.demo")
+@CainCommand(name = "cain.demo", permissionDefault = PermissionDefault.OP, permisstionDescription = "Permission to use /cain.demo command")
 public class DemoCommand extends AbsCainCommand{
 
  
