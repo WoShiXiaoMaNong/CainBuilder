@@ -56,8 +56,7 @@ public class CommandRegister {
         plugin.getServer().getPluginManager().addPermission(perm);
 
         // Register command executor
-        
-
+       
         plugin.getCommand(commandName).setExecutor(commandExecutor);
         logger.info("Registered command: " + commandName + "\twith executor " + commandExecutor.getClass().getName());
     }
