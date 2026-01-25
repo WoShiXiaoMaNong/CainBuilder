@@ -1,9 +1,13 @@
 package zm.mc.plugin.command;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.SimplePluginManager;
 
 import zm.mc.common.ClassScanner;
 import zm.mc.common.LoggerUtil;
@@ -27,7 +31,12 @@ public class CommandRegister {
         List<Class<?>> commandClasses = ClassScanner.getClasses(commandPackage);
         logger.info("Found " + commandClasses.size() + " classes in package " + commandPackage);
 
-  
+        logger.info("Retrieving CommandMap from SimplePluginManager.");
+        CommandMap commandMap = getCommandMap(plugin);
+        if (commandMap == null) {
+            logger.severe("CommandMap is null, cannot register command " );
+            throw new RuntimeException("Get CommandMap error!");
+        }
 
         int commandCount = 0;
         for(Class<?> cls : commandClasses) {
@@ -42,7 +51,7 @@ public class CommandRegister {
                
                 try {
                     Object commandInstance = cls.getConstructor(CainBuilderPlugin.class).newInstance(plugin);
-                    doRegisterCommand(plugin,  (AbsCainCommandExecutor) commandInstance,commandAnnotation);
+                    doRegisterCommand(plugin,  (AbsCainCommandExecutor) commandInstance,commandAnnotation, commandMap);
                     commandCount++;
                 } catch (Exception e) {
                     logger.severe("Failed to register command: " + commandAnnotation.name() + " with executor " + e.getMessage());
@@ -55,7 +64,7 @@ public class CommandRegister {
     }
 
 
-    private static void doRegisterCommand(CainBuilderPlugin plugin, AbsCainCommandExecutor commandExecutor,CainCommand commandAnnotation) {
+    private static void doRegisterCommand(CainBuilderPlugin plugin, AbsCainCommandExecutor commandExecutor,CainCommand commandAnnotation,CommandMap commandMap) {
         String commandName = commandExecutor.getCommandName();
 
         // Register permission
@@ -65,11 +74,62 @@ public class CommandRegister {
         plugin.getServer().getPluginManager().addPermission(perm);
 
         // Register command executor
-  
+        PluginCommand dynamicCommand = createPluginCommandWithReflect( commandName,plugin);
+        dynamicCommand.setName(commandName);
+        dynamicCommand.setDescription( commandAnnotation.commandDescription() );
+        dynamicCommand.setUsage( commandAnnotation.usage() );
+        String[] aliases = commandAnnotation.aliases();
+        if( aliases != null && aliases.length >0 ){
+            dynamicCommand.setAliases( List.of(aliases) );
+        }
+        boolean ss = commandMap.register("_",dynamicCommand);
+        if(!ss){
+            logger.severe("Failed to register command: " + commandName + " with executor " + commandExecutor.getClass().getName());
+            return;
+        }
+       
         // Set the executor for the command
         plugin.getCommand(commandName).setExecutor(commandExecutor);
         logger.info("Registered command: " + commandName + "\twith executor " + commandExecutor.getClass().getName());
     }
 
+
+
+    private static CommandMap getCommandMap(CainBuilderPlugin plugin) {
+        CommandMap commandMap = null;
+        try {
+            Field field = SimplePluginManager.class.getDeclaredField("commandMap");
+            field.setAccessible(true);
+            commandMap = (CommandMap)(field.get(plugin.getServer().getPluginManager()));
+        } catch (Exception e) {
+            logger.severe("Failed to get CommandMap: " + e.getMessage());
+        }
+        return commandMap;
+        
+    }
+
+  private static PluginCommand createPluginCommandWithReflect(String name, CainBuilderPlugin plugin) {
+        try {
+            
+            java.lang.reflect.Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, org.bukkit.plugin.Plugin.class);
+            
+          
+            boolean originalAccessible = constructor.canAccess(null);
+            
+          
+            constructor.setAccessible(true);
+            
+         
+            PluginCommand command = constructor.newInstance(name, plugin);
+            
+         
+            constructor.setAccessible(originalAccessible);
+            
+            return command;
+        } catch (Exception e) {
+            logger.severe("Failed to create PluginCommand for " + name + ": " + e.getMessage());
+            return null;
+        }
+        }
 
 }

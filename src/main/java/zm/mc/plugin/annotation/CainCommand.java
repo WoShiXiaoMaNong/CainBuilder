@@ -12,6 +12,10 @@ import org.bukkit.permissions.PermissionDefault;
 @Retention(RetentionPolicy.RUNTIME)
 public  @interface CainCommand {
     String name();
+    String commandDescription() default "";
+    String usage() default "";
+    String[] aliases() default {};
+    
     PermissionDefault permissionDefault();
     String permisstionDescription() default "";
 }
