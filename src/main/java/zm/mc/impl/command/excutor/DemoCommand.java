@@ -1,19 +1,22 @@
-package zm.mc.plugin.command.excutor;
+package zm.mc.impl.command.excutor;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
-import zm.mc.plugin.CainBuilderPlugin;
-import zm.mc.plugin.annotation.CainCommand;
-import zm.mc.plugin.command.AbsCainCommandExecutor;
+import zm.mc.CainBuilderPlugin;
+import zm.mc.core.annotation.CainCommand;
+import zm.mc.core.command.AbsCainCommandExecutor;
 
 
 @CainCommand(
     name = "cain.demo", 
     commandDescription = "Demo command for CainBuilderPlugin",
-    permissionDefault = PermissionDefault.OP, permisstionDescription = "Permission to use /cain.demo command")
+    usage = "/cain.demo",
+    aliases = {"cda", "cdemo"},
+    permissionDefault = PermissionDefault.OP, 
+    permisstionDescription = "Permission to use /cain.demo command")
 public class DemoCommand extends AbsCainCommandExecutor{
 
  

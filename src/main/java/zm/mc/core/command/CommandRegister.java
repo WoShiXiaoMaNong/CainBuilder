@@ -1,4 +1,4 @@
-package zm.mc.plugin.command;
+package zm.mc.core.command;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -10,10 +10,10 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.SimplePluginManager;
 
-import zm.mc.common.ClassScanner;
-import zm.mc.common.LoggerUtil;
-import zm.mc.plugin.CainBuilderPlugin;
-import zm.mc.plugin.annotation.CainCommand;
+import zm.mc.CainBuilderPlugin;
+import zm.mc.core.annotation.CainCommand;
+import zm.mc.core.util.ClassScanner;
+import zm.mc.core.util.LoggerUtil;
 
 public class CommandRegister {
     private static final LoggerUtil logger = LoggerUtil.INSTANCE;

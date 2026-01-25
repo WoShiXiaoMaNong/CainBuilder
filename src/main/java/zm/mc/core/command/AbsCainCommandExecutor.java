@@ -1,10 +1,10 @@
-package zm.mc.plugin.command;
+package zm.mc.core.command;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.permissions.PermissionDefault;
 
-import zm.mc.plugin.CainBuilderPlugin;
-import zm.mc.plugin.annotation.CainCommand;
+import zm.mc.CainBuilderPlugin;
+import zm.mc.core.annotation.CainCommand;
 
 public abstract class AbsCainCommandExecutor implements CommandExecutor{
     
