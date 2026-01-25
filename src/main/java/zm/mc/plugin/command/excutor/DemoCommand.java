@@ -10,7 +10,10 @@ import zm.mc.plugin.annotation.CainCommand;
 import zm.mc.plugin.command.AbsCainCommandExecutor;
 
 
-@CainCommand(name = "cain.demo", permissionDefault = PermissionDefault.OP, permisstionDescription = "Permission to use /cain.demo command")
+@CainCommand(
+    name = "cain.demo", 
+    commandDescription = "Demo command for CainBuilderPlugin",
+    permissionDefault = PermissionDefault.OP, permisstionDescription = "Permission to use /cain.demo command")
 public class DemoCommand extends AbsCainCommandExecutor{
 
  
