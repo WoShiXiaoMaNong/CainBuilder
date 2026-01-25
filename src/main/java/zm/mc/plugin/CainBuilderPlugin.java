@@ -4,7 +4,7 @@ package zm.mc.plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import zm.mc.common.LoggerUtil;
-import zm.mc.plugin.commands.CommandRegister;
+import zm.mc.plugin.command.CommandRegister;
 
 
 public class CainBuilderPlugin extends JavaPlugin {

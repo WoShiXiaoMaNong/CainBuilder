@@ -6,7 +6,7 @@ commands:
   cain.demo:
     description: Main command for AlfaPlugin
     usage: /<command>
-    aliases: [a]
+    aliases: [cda]
 
 
 # It is recommended to define permissions in the command annotations (CainCommand.java) and register them programmatically.
@@ -14,5 +14,3 @@ commands:
 #     cain.demo:
 #         description: Demo command permission(s)
 #         default: op
-
-command-package: zm.mc.plugin.command

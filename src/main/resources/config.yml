@@ -1,0 +1,4 @@
+# Configuration for the CainBuilderPlugin
+
+# Specify the package where command classes are located
+command-package: zm.mc.plugin.command.excutor
