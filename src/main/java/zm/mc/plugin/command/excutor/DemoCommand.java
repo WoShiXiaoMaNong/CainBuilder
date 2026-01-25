@@ -1,4 +1,6 @@
-package zm.mc.plugin.commands;
+package zm.mc.plugin.command.excutor;
+
+import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -7,10 +9,11 @@ import org.bukkit.permissions.PermissionDefault;
 
 import zm.mc.plugin.CainBuilderPlugin;
 import zm.mc.plugin.annotation.CainCommand;
+import zm.mc.plugin.command.AbsCainCommandExecutor;
 
 
 @CainCommand(name = "cain.demo", permissionDefault = PermissionDefault.OP, permisstionDescription = "Permission to use /cain.demo command")
-public class DemoCommand extends AbsCainCommand{
+public class DemoCommand extends AbsCainCommandExecutor{
 
  
 	public DemoCommand(CainBuilderPlugin plugin) {
@@ -26,14 +29,29 @@ public class DemoCommand extends AbsCainCommand{
                 
             Player player = (Player) sender;
 
-            if( player.hasPermission("cain.demo")){
-                player.sendMessage(player.getName() + " executed /cain.demo command.");
+            if( this.hasPermission(sender)){
+                player.sendMessage(player.getName() + " executed /cain.demo command1234.");
             } else {
-                player.sendMessage("You do not have permission to execute this command.");
+                player.sendMessage("You do not have permission to execute this command.1234");
             }
                 
             return true;
    
+    }
+
+    @Override
+    public String getUsage() {
+        return "/<command>";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Demo command for CainBuilderPlugin";    
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return  List.of("demo","democmd");
     }
 
 }
