@@ -1,7 +1,5 @@
 package zm.mc.plugin.command.excutor;
 
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,19 +37,5 @@ public class DemoCommand extends AbsCainCommandExecutor{
    
     }
 
-    @Override
-    public String getUsage() {
-        return "/<command>";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Demo command for CainBuilderPlugin";    
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return  List.of("demo","democmd");
-    }
 
 }

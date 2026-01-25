@@ -1,7 +1,5 @@
 package zm.mc.plugin.command;
 
-import java.util.List;
-
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -16,9 +14,6 @@ public abstract class AbsCainCommandExecutor implements CommandExecutor{
         this.plugin = plugin;
     }
 
-    public abstract String getUsage();
-    public abstract String getDescription();
-    public abstract List<String> getAliases();
 
     public CainCommand getCainCommandAnnotation() {
         return this.getClass().getAnnotation(CainCommand.class);
