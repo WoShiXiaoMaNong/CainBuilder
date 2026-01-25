@@ -1,4 +1,4 @@
-package zm.mc.common;
+package zm.mc.core.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import zm.mc.plugin.CainBuilderPlugin;
+import zm.mc.CainBuilderPlugin;
 
 public class ClassScanner {
     private static final LoggerUtil logger = LoggerUtil.INSTANCE;

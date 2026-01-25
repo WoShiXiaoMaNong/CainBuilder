@@ -1,6 +1,6 @@
 name: CainBuilderPlugin
 version: 1.0
-main: zm.mc.plugin.CainBuilderPlugin
+main: zm.mc.CainBuilderPlugin
 
 # It is recommended to define commands in the command annotations (CainCommand.java) and register them programmatically.
 # commands:

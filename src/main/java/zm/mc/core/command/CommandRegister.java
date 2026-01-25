@@ -1,6 +1,7 @@
-package zm.mc.plugin.command;
+package zm.mc.core.command;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.bukkit.command.CommandMap;
@@ -9,10 +10,10 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.SimplePluginManager;
 
-import zm.mc.common.ClassScanner;
-import zm.mc.common.LoggerUtil;
-import zm.mc.plugin.CainBuilderPlugin;
-import zm.mc.plugin.annotation.CainCommand;
+import zm.mc.CainBuilderPlugin;
+import zm.mc.core.annotation.CainCommand;
+import zm.mc.core.util.ClassScanner;
+import zm.mc.core.util.LoggerUtil;
 
 public class CommandRegister {
     private static final LoggerUtil logger = LoggerUtil.INSTANCE;
@@ -53,7 +54,7 @@ public class CommandRegister {
                     Object commandInstance = cls.getConstructor(CainBuilderPlugin.class).newInstance(plugin);
                     doRegisterCommand(plugin,  (AbsCainCommandExecutor) commandInstance,commandAnnotation, commandMap);
                     commandCount++;
-                } catch (Exception e) {
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                     logger.severe("Failed to register command: " + commandAnnotation.name() + " with executor " + e.getMessage());
                     break;
                 }
@@ -89,7 +90,12 @@ public class CommandRegister {
         }
        
         // Set the executor for the command
-        plugin.getCommand(commandName).setExecutor(commandExecutor);
+        PluginCommand  pluginCommand = plugin.getCommand(commandName);
+        if( pluginCommand == null ){
+            logger.severe("Failed to get PluginCommand for: " + commandName + " after registration.");
+            return;
+        }
+        pluginCommand.setExecutor(commandExecutor);
         logger.info("Registered command: " + commandName + "\twith executor " + commandExecutor.getClass().getName());
     }
 
@@ -101,7 +107,7 @@ public class CommandRegister {
             Field field = SimplePluginManager.class.getDeclaredField("commandMap");
             field.setAccessible(true);
             commandMap = (CommandMap)(field.get(plugin.getServer().getPluginManager()));
-        } catch (Exception e) {
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
             logger.severe("Failed to get CommandMap: " + e.getMessage());
         }
         return commandMap;
@@ -126,7 +132,7 @@ public class CommandRegister {
             constructor.setAccessible(originalAccessible);
             
             return command;
-        } catch (Exception e) {
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             logger.severe("Failed to create PluginCommand for " + name + ": " + e.getMessage());
             return null;
         }

@@ -1,6 +1,6 @@
-package zm.mc.common;
+package zm.mc.core.util;
 
-import zm.mc.plugin.CainBuilderPlugin;
+import zm.mc.CainBuilderPlugin;
 
 public class LoggerUtil {
     private static CainBuilderPlugin plugin;
