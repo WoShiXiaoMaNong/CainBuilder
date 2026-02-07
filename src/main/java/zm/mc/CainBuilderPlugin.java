@@ -3,7 +3,7 @@ package zm.mc;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import zm.mc.core.command.CommandRegister;
+import zm.mc.core.CainBuilderRegister;
 import zm.mc.core.util.LoggerUtil;
 
 
@@ -14,18 +14,16 @@ public class CainBuilderPlugin extends JavaPlugin {
         getLogger().info("Cain Builder has been enabled! Start to init the plugin...");
         LoggerUtil.init(this);
         logger.info("Logger initialized.");
-        logger.info("****************************************************");
+        logger.info("*******************Register Commands****************");
         logger.info("Registering commands...");
-        CommandRegister.registerCommands(this);
+        CainBuilderRegister.registerCommands(this);  // <<<< register commands 
         logger.info("All commands registered.");
         
-        logger.info("****************************************************");
+        logger.info("********************Register Events*****************");
         logger.info("Registering Events...");
-        CommandRegister.registerEvents(this);
+        CainBuilderRegister.registerEvents(this); // <<<< register events 
         logger.info("All Events registered.");
-
         logger.info("Cain Builder plugin initialization complete.");
-        
         logger.info("****************************************************");
         
     }

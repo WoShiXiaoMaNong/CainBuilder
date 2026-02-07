@@ -1,4 +1,4 @@
-package zm.mc.core.command;
+package zm.mc.core;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -14,16 +14,17 @@ import org.bukkit.plugin.SimplePluginManager;
 
 import zm.mc.CainBuilderPlugin;
 import zm.mc.core.annotation.CainCommand;
+import zm.mc.core.command.AbsCainCommandExecutor;
 import zm.mc.core.util.ClassScanner;
 import zm.mc.core.util.LoggerUtil;
 
-public class CommandRegister {
+public class CainBuilderRegister {
     private static final LoggerUtil logger = LoggerUtil.INSTANCE;
 
     private static final String COMMAND_PACKAGE_NAME_CFG_KEY = "command-package";
     private static final String EVENT_PACKAGE_NAME_CFG_KEY = "event-package";
 
-    private CommandRegister() {
+    private CainBuilderRegister() {
         // Private constructor to prevent instantiation
     }
 
