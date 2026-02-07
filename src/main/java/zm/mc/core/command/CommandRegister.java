@@ -1,11 +1,13 @@
 package zm.mc.core.command;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.SimplePluginManager;
@@ -19,9 +21,40 @@ public class CommandRegister {
     private static final LoggerUtil logger = LoggerUtil.INSTANCE;
 
     private static final String COMMAND_PACKAGE_NAME_CFG_KEY = "command-package";
+    private static final String EVENT_PACKAGE_NAME_CFG_KEY = "event-package";
 
     private CommandRegister() {
         // Private constructor to prevent instantiation
+    }
+
+    public static void registerEvents(CainBuilderPlugin plugin){
+        logger.info("Command registration initiated. Getting command package from config.yml with key: " + EVENT_PACKAGE_NAME_CFG_KEY);
+        String eventPackage = plugin.getConfig().getString(EVENT_PACKAGE_NAME_CFG_KEY);
+        logger.info("Commands register start :" + eventPackage);
+
+        List<Class<?>> eventClasses = ClassScanner.getClasses(eventPackage);
+        logger.info("Found " + eventClasses.size() + " classes in package " + eventPackage);
+
+       
+        int eventCount = 0;
+        for(Class<?> cls : eventClasses) {
+            // check if the cls is  implements CommandExecutor
+            if( !Listener.class.isAssignableFrom(cls) ){
+                logger.warn("Class " + cls.getName() + " does not implement " + Listener.class.getSimpleName() + ", skipping.");
+                continue;
+            }
+            try{
+                Constructor<?> constructor = cls.getDeclaredConstructor();
+                Listener listener = (Listener) constructor.newInstance();
+                plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+                logger.info("Class " + cls.getName() + " Register done.");
+            }catch(Exception e){
+                logger.severe("Create listener error!" + e.getMessage());
+            }
+            eventCount++;
+        }
+        logger.info("Event register finished. Total registered events: " + eventCount);
+
     }
 
     public static void registerCommands(CainBuilderPlugin plugin) {
@@ -74,7 +107,7 @@ public class CommandRegister {
         Permission perm = new Permission(commandName, perDesc,permDefault);
         plugin.getServer().getPluginManager().addPermission(perm);
 
-        // Register command executor
+        // Register command dynamically
         PluginCommand dynamicCommand = createPluginCommandWithReflect( commandName,plugin);
         dynamicCommand.setName(commandName);
         dynamicCommand.setDescription( commandAnnotation.commandDescription() );
@@ -83,8 +116,8 @@ public class CommandRegister {
         if( aliases != null && aliases.length >0 ){
             dynamicCommand.setAliases( List.of(aliases) );
         }
-        boolean ss = commandMap.register("_",dynamicCommand);
-        if(!ss){
+        boolean registered = commandMap.register("_",dynamicCommand);
+        if(!registered){
             logger.severe("Failed to register command: " + commandName + " with executor " + commandExecutor.getClass().getName());
             return;
         }
@@ -134,6 +167,7 @@ public class CommandRegister {
             return command;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             logger.severe("Failed to create PluginCommand for " + name + ": " + e.getMessage());
+            logger.severe("Maybe due to incompatible Bukkit/Spigot version.Please check the PluginCommand constructor in your server version.");
             return null;
         }
         }
