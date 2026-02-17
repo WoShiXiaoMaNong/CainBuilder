@@ -17,7 +17,7 @@ import zm.mc.impl.service.MqttService;
     commandDescription = "Start cain chat(Connect the mqtt server)",
     usage = "/cain.chat {tcp://mqtt.host.name:port} {userName} {pwd}",
     aliases = {"cc", "cchat"},
-    permissionDefault = PermissionDefault.OP, 
+    permissionDefault = PermissionDefault.TRUE, 
     permisstionDescription = "Permission to use /cain.chat command")
 public class PlayerChatCommand extends AbsCainCommandExecutor{
 

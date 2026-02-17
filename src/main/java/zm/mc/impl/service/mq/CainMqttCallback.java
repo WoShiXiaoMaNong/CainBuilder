@@ -1,7 +1,6 @@
 package zm.mc.impl.service.mq;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -11,11 +10,13 @@ import com.google.gson.Gson;
 
 import zm.mc.CainBuilderPlugin;
 import zm.mc.core.util.LoggerUtil;
+import zm.mc.core.util.StringUtils;
+import zm.mc.impl.service.ChatService;
 
 public class CainMqttCallback implements MqttCallback{
 
     private final CainBuilderPlugin plugin;
-    private Gson gson;
+    private final Gson gson;
 
     public CainMqttCallback( CainBuilderPlugin plugin){
         this.plugin = plugin;
@@ -36,11 +37,32 @@ public class CainMqttCallback implements MqttCallback{
         }
         MqttMsg msg = this.parse(payload);
         if( clientId!= null &&clientId.equals(msg.getClientId())){
-            return;
+            return; // send by the server itself, ignore
         }
+         if( msg.getTargetClientId() != null && clientId != null && !clientId.equals(msg.getTargetClientId())){
+            return; // not send to me
+        }
+      
+        if(StringUtils.isEmpty(msg.getReceiver())){
+            this.publicChat(msg);
+        }else{
+            this.sendToPlayer(msg);
+        }
+        
+    }
 
+    private void publicChat(MqttMsg msg){
         String message = String.format("%s :%s", msg.getSender(),msg.getMsg());
-        Bukkit.broadcastMessage(ChatColor.GOLD + "[外部] " + ChatColor.WHITE + message);
+        ChatService.INSTENCE.sendToAll(ChatColor.GOLD + "[" + msg.getClientId() + "] " + ChatColor.WHITE + message);
+    }
+
+    private void sendToPlayer(MqttMsg msg){
+        String message = String.format("%s :%s", msg.getSender(),msg.getMsg());
+        String errorMsg = ChatService.INSTENCE.sendTo( msg.getReceiver(), ChatColor.GOLD + "["+ msg.getClientId() +"] " + ChatColor.WHITE + message);
+        if( errorMsg != null){
+            LoggerUtil.INSTANCE.severe(errorMsg);
+            //tdb. some error message should be send to the sender back.
+        }
     }
 
     private MqttMsg parse(String payload){
