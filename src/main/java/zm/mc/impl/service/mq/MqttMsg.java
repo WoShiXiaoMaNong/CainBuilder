@@ -5,6 +5,9 @@ public class MqttMsg {
     private String sender;
     private String msg;
 
+    private String targetClientId;
+    private String receiver;
+
     public MqttMsg( String sender, String msg) {
         this.msg = msg;
         this.sender = sender;
@@ -32,6 +35,22 @@ public class MqttMsg {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getTargetClientId() {
+        return targetClientId;
+    }
+
+    public void setTargetClientId(String targetClientId) {
+        this.targetClientId = targetClientId;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
 
