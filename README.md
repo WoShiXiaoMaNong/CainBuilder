@@ -5,14 +5,14 @@ mc plugin.
 #### 1. cain.mqtt (连接mqtt 服务器)
     - /cain.mqtt {tcp://mqtt.host.name:port} {userName} {pwd}
     - 配置文件 在 config.xml
-     - 订阅主题
+     - 订阅主题 （订阅相同主题的所有服务器，可以一起公聊）
      - 当前服务器的client id (当有多个服务器连接相同主题时，请保证每个mc 服务器的client id 不重复)
 >> 注意，连接成功后，在当前服务器中的聊天，会被同步发送到其他连接到相同mqtt 主题的所有服务器。（相当于多服务器公聊）
 
 #### 2. cain.msg (跨服务器聊天)
     - /cain.msg 服务器id 聊天内容
-    - 改命令用于发送聊天信息到单个 服务器id
->> 注意 1. 服务器启动后，需要先时用 cain.mqtt 连接 mqtt 服务器.
+    - 该命令用于发送聊天信息到单个 服务器id
+>> 注意 1. 服务器启动后，需要先使用 cain.mqtt 连接 mqtt 服务器. （只需要在服务器启动后连接一次）
 
 
 ### 配置说明(config.yml)
