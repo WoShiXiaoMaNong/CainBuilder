@@ -1,0 +1,17 @@
+name: CainBuilderPlugin
+version: 1.0
+main: zm.mc.CainBuilderPlugin
+
+# It is recommended to define commands in the command annotations (CainCommand.java) and register them programmatically.
+# commands:
+#   cain.demo:
+#     description: Main command for AlfaPlugin
+#     usage: /<command>
+#     aliases: [cda]
+
+
+# It is recommended to define permissions in the command annotations (CainCommand.java) and register them programmatically.
+# permissions:
+#     cain.demo:
+#         description: Demo command permission(s)
+#         default: op

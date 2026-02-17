@@ -1,0 +1,13 @@
+# Configuration for the CainBuilderPlugin
+
+# Specify the package where command classes are located
+command-package: zm.mc.impl.command.excutor
+event-package: zm.mc.impl.event
+
+
+# MQTT configuration
+clientId: cain-mc-server
+topic: mqtt
+qos: 1
+keepAliveInterval: 20 
+connectionTimeout: 20
