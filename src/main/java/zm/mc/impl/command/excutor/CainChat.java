@@ -3,6 +3,7 @@ package zm.mc.impl.command.excutor;
 import static org.bukkit.Bukkit.getServer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
 import zm.mc.CainBuilderPlugin;
@@ -40,6 +41,8 @@ public class CainChat extends AbsCainCommandExecutor{
             msg.setTargetClientId(clientId);
 
             MqttService.instance.send(msg);
+            Player player = (Player) sender;
+            sender.sendMessage(player.getUniqueId(),player.getName() + ": " + msgStr);
             return true;
    
     }
