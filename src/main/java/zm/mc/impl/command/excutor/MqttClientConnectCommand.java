@@ -13,16 +13,16 @@ import zm.mc.impl.service.MqttService;
 
 
 @CainCommand(
-    name = "cain.chat", 
-    commandDescription = "Start cain chat(Connect the mqtt server)",
-    usage = "/cain.chat {tcp://mqtt.host.name:port} {userName} {pwd}",
-    aliases = {"cc", "cchat"},
+    name = "cain.mqtt", 
+    commandDescription = "Connect the mqtt server",
+    usage = "/cain.mqtt {tcp://mqtt.host.name:port} {userName} {pwd}",
+    aliases = {"cmqtt"},
     permissionDefault = PermissionDefault.OP, 
-    permisstionDescription = "Permission to use /cain.chat command")
-public class PlayerChatCommand extends AbsCainCommandExecutor{
+    permisstionDescription = "Permission to use /cain.mqtt command")
+public class MqttClientConnectCommand extends AbsCainCommandExecutor{
 
  
-	public PlayerChatCommand(CainBuilderPlugin plugin) {
+	public MqttClientConnectCommand(CainBuilderPlugin plugin) {
 		super(plugin);
 	}
   
